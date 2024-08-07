@@ -1,31 +1,57 @@
-﻿using EmployeeAPI.Data.Models;
+﻿using EmployeeAPI.Data.ContextData;
+using EmployeeAPI.Data.Models;
 using EmployeeAPI.Services.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeAPI.Services.Services.Repositories
 {
-    public class CascadingLogic : ICascadingLogic, IDisposable
+    public class CascadingLogic(EmployeeContext employee) : ICascadingLogic, IDisposable
     {
         private bool disposedValue;
 
-        public Task<List<Country>> BindCountry()
+        public async Task<List<Country>> BindCountry()
         {
+            try 
+            {
+                 
+                var country = await employee.Countries.ToListAsync();
+                return country;
+            }
 
-            throw new NotImplementedException();
+            catch
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        public Task<List<State>> BindState(int countryId)
+        public async Task<List<State>> BindState(int countryId)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                var states = await employee.States.Where(s=>s.CountryId==countryId).ToListAsync();
+                return states;
+            }
+
+            catch
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        public Task<List<City>> BindCity(int stateId)
+        public async Task<List<City>> BindCity(int stateId)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                var cities = await employee.Cities.Where(s => s.StateId == stateId).ToListAsync();
+                return cities;
+            }
+
+            catch
+            {
+                throw new NotImplementedException();
+            }
         }
 
         protected virtual void Dispose(bool disposing)

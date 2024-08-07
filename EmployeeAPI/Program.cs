@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddRouting();
+builder.Services.AddControllers();
 builder.Services.AddDbContext<EmployeeContext>(x=>x.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeDB")));
 builder.Services.AddScoped<ICascadingLogic, CascadingLogic>();
 builder.Services.AddScoped<ICRUDLogic, CRUDLogic>();
@@ -23,10 +24,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Employee API V1");
-    });
+    app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
