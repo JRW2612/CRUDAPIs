@@ -13,6 +13,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddRouting();
 builder.Services.AddDbContext<EmployeeContext>(x=>x.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeDB")));
 builder.Services.AddScoped<ICascadingLogic, CascadingLogic>();
+builder.Services.AddScoped<ICRUDLogic, CRUDLogic>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
