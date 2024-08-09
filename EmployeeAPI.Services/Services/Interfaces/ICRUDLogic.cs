@@ -9,12 +9,12 @@ namespace EmployeeAPI.Services.Services.Interfaces
 {
     public interface ICRUDLogic
     {
-        Task<EmpData> AddEmpData(EmpData E);
+        public Task<EmpData> AddEmpData(EmpData E);
 
-        Task<EmpData> UpdateEmpData(EmpData E,int Id);
+        public Task<EmpData> UpdateEmpData(EmpData E,int Id);
 
-        Task<int> DeleteEmpData(int Id);
+        public Task<int> DeleteEmpData(int Id);
 
-        Task<List<EmpData>> GetEmpData();
+        public Task<IList<EmpData>> GetEmpData();
     }
 }

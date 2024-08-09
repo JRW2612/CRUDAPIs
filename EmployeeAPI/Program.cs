@@ -10,7 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
-builder.Services.AddRouting();
 builder.Services.AddControllers();
 builder.Services.AddDbContext<EmployeeContext>(x=>x.UseSqlServer(builder.Configuration.GetConnectionString("EmployeeDB")));
 builder.Services.AddScoped<ICascadingLogic, CascadingLogic>();
@@ -30,7 +29,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseRouting();
 app.MapControllers();
 app.Run();
 

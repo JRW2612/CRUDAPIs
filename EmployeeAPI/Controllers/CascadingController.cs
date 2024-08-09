@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeAPI.Controllers
 {
-    [Route("api/CascadingDropdown")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CascadingController(ICascadingLogic cascading) : ControllerBase
     {

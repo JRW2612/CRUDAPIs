@@ -77,11 +77,11 @@ namespace EmployeeAPI.Data.Migrations
                     b.Property<DateTime>("DeletedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("DoB")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("DoB")
+                        .HasColumnType("datetime2");
 
-                    b.Property<DateOnly>("Doj")
-                        .HasColumnType("date");
+                    b.Property<DateTime>("Doj")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -132,7 +132,7 @@ namespace EmployeeAPI.Data.Migrations
 
                     b.ToTable("Employee", t =>
                         {
-                            t.HasTrigger("trgaddemployeecode");
+                            t.HasTrigger("trggaddemployeecode");
                         });
 
                     b.HasAnnotation("SqlServer:UseSqlOutputClause", false);

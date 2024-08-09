@@ -18,7 +18,7 @@ namespace EmployeeAPI.Data.ContextData
         protected override void OnModelCreating(ModelBuilder modelBuilder) =>
             // Configure a trigger for your table (replace "SomeTrigger" with your actual trigger name)
             modelBuilder.Entity<EmpData>()
-                .ToTable(tb => tb.HasTrigger("trgaddemployeecode"));
+                .ToTable(tb => tb.HasTrigger("trggaddemployeecode"));
 
         public DbSet<EmpData> Employee { get; set; }
         public DbSet<Country> Countries { get; set; }
