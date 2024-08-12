@@ -39,7 +39,7 @@ namespace EmployeeAPI.Services.Services.Repositories
         }
 
 
-         async Task<EmpData> ICRUDLogic.AddEmpData(EmpData E)
+        async Task<EmpData> ICRUDLogic.AddEmpData(EmpData E)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace EmployeeAPI.Services.Services.Repositories
             new SqlParameter("@CreatedDate", E.CreatedDate ),
             new SqlParameter("@UpdatedDate", E.UpdatedDate ),
             new SqlParameter("@IsDeleted", E.IsDeleted),
-            new SqlParameter("@DeletedDate", E.DeletedDate )
+            new SqlParameter("@DeletedDate",  (object)DBNull.Value ?? DBNull.Value )
         };
                 await employeeContext.Database.ExecuteSqlRawAsync(
                             "EXEC InsertEmployee @FirstName, @LastName, @CountryId, @StateId, @CityId, @Email, @Phone, @PAN, @Passport, @Image, @Gender, @IsActive, @DoB, @Doj, @CreatedDate, @UpdatedDate, @IsDeleted, @DeletedDate",
@@ -74,29 +74,98 @@ namespace EmployeeAPI.Services.Services.Repositories
                     .FirstOrDefaultAsync();
 
                 return newlyInsertedEmpData;
-            
+
 
             }
-            catch
+            catch( Exception ex )
             {
-                throw new NotImplementedException();
+                throw new Exception("An error occurred while saving the employee data.", ex);
             }
         }
 
-        Task<int> ICRUDLogic.DeleteEmpData(int Id)
+       async Task<int> ICRUDLogic.DeleteEmpData(int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var parameters = new[]
+           {
+           
+            new SqlParameter("@Id",Id)
+           
+           };
+               var result=  await employeeContext.Database.ExecuteSqlRawAsync(
+                       "EXEC UpdateEmployee @Id",   parameters);
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                throw new Exception("An error occurred while removing the employee data.", ex);
+            }
         }
 
 
-        Task<IList<EmpData>> ICRUDLogic.GetEmpData()
+       async Task<IList<EmpData>> ICRUDLogic.GetEmpData()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var empDataList = await employeeContext.Employee
+                          .FromSqlRaw("EXEC GetEmployee").ToListAsync();
+                return empDataList;
+
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                throw new Exception("An error occurred while getting the employee data.", ex);
+            }
         }
 
-        Task<EmpData> ICRUDLogic.UpdateEmpData(EmpData E, int Id)
+        public async Task<EmpData> UpdateEmpData(EmpData E, int Id)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var parameters = new[]
+                {
+            new SqlParameter("@Id", Id), // Make sure the Id is used
+            new SqlParameter("@FirstName", E.FirstName),
+            new SqlParameter("@LastName", E.LastName),
+            new SqlParameter("@CountryId", E.CountryId),
+            new SqlParameter("@StateId", E.StateId),
+            new SqlParameter("@CityId", E.CityId),
+            new SqlParameter("@Email", E.Email),
+            new SqlParameter("@Phone", E.Phone),
+            new SqlParameter("@PAN", E.PAN),
+            new SqlParameter("@Passport", E.Passport),
+            new SqlParameter("@Image", E.Image),
+            new SqlParameter("@Gender", (int)E.gender),
+            new SqlParameter("@IsActive", E.IsActive),
+            new SqlParameter("@DoB", E.DoB),
+            new SqlParameter("@Doj", E.Doj),
+            new SqlParameter("@CreatedDate", E.CreatedDate),
+            new SqlParameter("@UpdatedDate", E.UpdatedDate),
+            new SqlParameter("@IsDeleted", E.IsDeleted),
+            new SqlParameter("@DeletedDate", (object)DBNull.Value ?? DBNull.Value)
+        };
+
+                await employeeContext.Database.ExecuteSqlRawAsync(
+                    "EXEC UpdateEmployee @Id, @FirstName, @LastName, @CountryId, @StateId, @CityId, @Email, @Phone, @PAN, @Passport, @Image, @Gender, @IsActive, @DoB, @Doj, @CreatedDate, @UpdatedDate, @IsDeleted, @DeletedDate",
+                    parameters);
+
+                // Retrieve the updated EmpData object using the Id
+                var UpdatedEmpData = await employeeContext.Employee
+                    .FirstOrDefaultAsync(emp => emp.RowId == Id);
+
+                return UpdatedEmpData;
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it as needed
+                throw new Exception("An error occurred while updating the employee data.", ex);
+            }
         }
+
     }
 }

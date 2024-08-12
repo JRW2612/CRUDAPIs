@@ -41,25 +41,27 @@ namespace EmployeeAPI.Data.Models
 
         public bool IsActive { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime DoB { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime Doj { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyyTHH:mm:ss}")]
         public DateTime CreatedDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyyTHH:mm:ss}")]
         public DateTime UpdatedDate { get; set; }
 
-        [DisplayFormat(DataFormatString = "{0:yyyy-MM-ddTHH:mm:ss}")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyyTHH:mm:ss}")]
         public DateTime DeletedDate { get; set; }
 
         public bool IsDeleted { get; set; }
 
-       
-
+        public static implicit operator HttpContent(EmpData v)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 
@@ -78,7 +80,7 @@ namespace EmployeeAPI.Data.Models
 
     public class DateOnlyJsonConverter : JsonConverter<DateOnly>
     {
-        private const string Format = "yyyy-MM-dd";
+        private const string Format = "dd-MM-yyyy";
 
         public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -94,7 +96,7 @@ namespace EmployeeAPI.Data.Models
 
     public class DateTimeJsonConverter : JsonConverter<DateTime>
     {
-        private const string Format = "yyyy-MM-ddTHH:mm:ss";
+        private const string Format = "dd-MM-yyyyTHH:mm:ss";
 
         public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
