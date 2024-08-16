@@ -1,9 +1,6 @@
-﻿using Azure.Core;
-using EmployeeAPI.Data.Models;
+﻿using EmployeeAPI.Data.Models;
 using EmployeeAPI.Services.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace EmployeeAPI.Controllers
 {
@@ -60,5 +57,24 @@ namespace EmployeeAPI.Controllers
             }
 
         }
+
+        [Route("RemoveEmployee")]
+        [HttpDelete]
+        public async Task<IActionResult> DeleteEmployee(int Id)
+        {
+            try
+            {
+                var result = await cRUDLogic.DeleteEmpData(Id);
+                return Ok(result);
+
+            }
+            catch
+            {
+                return StatusCode(400);
+            }
+
+        }
+
+
     }
 }

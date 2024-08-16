@@ -85,8 +85,11 @@ namespace EmployeeAPI.Services.Services.Repositories
 
        async Task<int> ICRUDLogic.DeleteEmpData(int Id)
         {
+           
             try
             {
+               
+              
                 var parameters = new[]
            {
            
@@ -94,7 +97,7 @@ namespace EmployeeAPI.Services.Services.Repositories
            
            };
                var result=  await employeeContext.Database.ExecuteSqlRawAsync(
-                       "EXEC UpdateEmployee @Id",   parameters);
+                       "EXEC DeleteEmployee @Id",   parameters);
 
                 return result;
 
@@ -111,9 +114,35 @@ namespace EmployeeAPI.Services.Services.Repositories
         {
             try
             {
-                var empDataList = await employeeContext.Employee
-                          .FromSqlRaw("EXEC GetEmployee").ToListAsync();
-                return empDataList;
+                var empDataList = (await employeeContext.Employee
+                      .FromSqlRaw("EXEC GetEmployee")
+                      .ToListAsync()) // Load data into memory asynchronously
+                      .Select(emp => new EmpData
+                      {
+                          RowId = emp.RowId,
+                          EmployeeCode=emp.EmployeeCode,
+                          FirstName = emp.FirstName,
+                          LastName = emp.LastName,
+                          CountryId = emp.CountryId,
+                          StateId = emp.StateId,
+                          CityId = emp.CityId,
+                          Email = emp.Email,
+                          Phone = emp.Phone,
+                          PAN = emp.PAN,
+                          Passport = emp.Passport,
+                          Image = emp.Image,
+                          gender = emp.gender,
+                          IsActive = emp.IsActive,
+                          DoB = emp.DoB,
+                          Doj = emp.Doj,
+                          CreatedDate = emp.CreatedDate,
+                          UpdatedDate = emp.UpdatedDate,
+                          DeletedDate = emp.DeletedDate,
+                          IsDeleted = emp.IsDeleted
+                      })
+                      .ToList(); // Convert the projection to
+   return empDataList;
+
 
             }
             catch (Exception ex)

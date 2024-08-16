@@ -36,7 +36,7 @@ namespace EmployeeAPI.Data.Models
 
         public required string Passport { get; set; }
 
-        public string Image { get; set; }
+        public string? Image { get; set; }
         public required Gender gender { get; set; }
 
         public bool IsActive { get; set; }
