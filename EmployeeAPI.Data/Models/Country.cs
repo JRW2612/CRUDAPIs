@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeAPI.Data.Models
 {
     public class Country
     {
         [Key]
-        public int RowId { get; set; }
+        public int CountryId { get; set; }
 
         public string? CountryName { get; set; }
     }

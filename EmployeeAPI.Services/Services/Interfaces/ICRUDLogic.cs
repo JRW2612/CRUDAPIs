@@ -1,4 +1,5 @@
 ﻿using EmployeeAPI.Data.Models;
+using EmployeeAPI.Data.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace EmployeeAPI.Services.Services.Interfaces
 
         public Task<int> DeleteEmpData(int Id);
 
-        public Task<IList<EmpData>> GetEmpData();
+        public Task<IList<EmpViewModel>> GetEmpData();
     }
 }

@@ -10,7 +10,7 @@ namespace EmployeeAPI.Data.Models
     public class City
     {
         [Key]
-        public int RowId { get; set; }
+        public int CityId { get; set; }
 
         public string? CityName { get; set; }
 

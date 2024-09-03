@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -22,11 +23,14 @@ namespace EmployeeAPI.Data.Models
 
         public required string LastName { get; set; }
 
-        public required int CountryId { get; set; }
+       
+        public  int CountryId { get; set; }
 
-        public required int StateId { get;set; }
+        
+        public  int StateId { get;set; }
 
-        public required int CityId { get; set; }
+      
+        public  int CityId { get; set; }
 
         public required string Email { get; set; }
 
@@ -57,6 +61,19 @@ namespace EmployeeAPI.Data.Models
         public DateTime DeletedDate { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        [ForeignKey(nameof(CountryId))]
+        public  virtual Country? GetCountry { get; set; }
+
+        [ForeignKey(nameof(StateId))]
+        
+        public  virtual State? GetState { get; set; }
+
+        [ForeignKey(nameof(CityId))]
+        public  virtual City? GetCity { get; set; }
+        public string CountryName { get; set; }
+        public string StateName { get; set; }
+        public string CityName { get; set; }
 
         public static implicit operator HttpContent(EmpData v)
         {

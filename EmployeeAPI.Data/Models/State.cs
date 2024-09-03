@@ -10,7 +10,7 @@ namespace EmployeeAPI.Data.Models
     public class State
     {
         [Key]
-        public int RowId { get; set; }
+        public int StateId { get; set; }
 
         public string? StateName { get; set; }
 

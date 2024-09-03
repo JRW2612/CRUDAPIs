@@ -1,9 +1,11 @@
 ﻿using EmployeeAPI.Data.Models;
 using EmployeeAPI.Services.Services.Interfaces;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeAPI.Controllers
 {
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
     public class EmployeeController(ICRUDLogic cRUDLogic) : ControllerBase
@@ -27,6 +29,7 @@ namespace EmployeeAPI.Controllers
 
         [Route("NewEmployee")]
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> AddEmployee(EmpData data)
         {
             try 
@@ -44,6 +47,7 @@ namespace EmployeeAPI.Controllers
 
         [Route("EditEmployee")]
         [HttpPut]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> EditEmployee(EmpData data,int e)
         {
             try
