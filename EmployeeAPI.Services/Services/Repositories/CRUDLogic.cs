@@ -1,5 +1,6 @@
 ﻿using EmployeeAPI.Data.ContextData;
 using EmployeeAPI.Data.Models;
+using EmployeeAPI.Data.ViewModels;
 using EmployeeAPI.Services.Services.Interfaces;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -70,7 +71,7 @@ namespace EmployeeAPI.Services.Services.Repositories
 
 				// Retrieve the newly inserted EmpData object
 				var newlyInsertedEmpData = await employeeContext.Employee
-					.OrderByDescending(emp => emp.CreatedDate)
+					.OrderByDescending(e => e.CreatedDate)
 					.FirstOrDefaultAsync();
 
 				return newlyInsertedEmpData;
@@ -110,35 +111,35 @@ namespace EmployeeAPI.Services.Services.Repositories
 		}
 
 
-		async Task<IList<EmpData>> ICRUDLogic.GetEmpData()
+		async Task<IList<EmpViewModel>> ICRUDLogic.GetEmpData()
 		{
 			try
 			{
 				var empDataList = (await employeeContext.Employee
 					  .FromSqlRaw("EXEC GetEmployee")
 					  .ToListAsync()) // Load data into memory asynchronously
-					  .Select(emp => new EmpData
+					  .Select(e => new EmpViewModel
 					  {
-						  RowId = emp.RowId,
-						  EmployeeCode = emp.EmployeeCode,
-						  FirstName = emp.FirstName,
-						  LastName = emp.LastName,
-						  CountryId = emp.CountryId,
-						  StateId = emp.StateId,
-						  CityId = emp.CityId,
-						  Email = emp.Email,
-						  Phone = emp.Phone,
-						  PAN = emp.PAN,
-						  Passport = emp.Passport,
-						  Image = emp.Image,
-						  gender = emp.gender,
-						  IsActive = emp.IsActive,
-						  DoB = emp.DoB,
-						  Doj = emp.Doj,
-						  CreatedDate = emp.CreatedDate,
-						  UpdatedDate = emp.UpdatedDate,
-						  DeletedDate = emp.DeletedDate,
-						  IsDeleted = emp.IsDeleted
+						 RowId=e.RowId,
+						  EmployeeCode = e.EmployeeCode,
+						  FirstName = e.FirstName,
+						  LastName = e.LastName,
+						  CountryName = e.CountryName,
+						  StateName = e.StateName,
+						  CityName = e.CityName,
+						  Email = e.Email,
+						  Phone = e.Phone,
+						  PAN = e.PAN,
+						  Passport = e.Passport,
+						  Image = e.Image,
+						  Gender = e.gender,
+						  IsActive = e.IsActive,
+						  DoB = e.DoB,
+						  Doj = e.Doj,
+						  CreatedDate = e.CreatedDate,
+						  UpdatedDate = e.UpdatedDate,
+						  DeletedDate = e.DeletedDate,
+						  IsDeleted = e.IsDeleted
 					  })
 					  .ToList(); // Convert the projection to
 				return empDataList;
@@ -185,7 +186,7 @@ namespace EmployeeAPI.Services.Services.Repositories
 
 				// Retrieve the updated EmpData object using the Id
 				var UpdatedEmpData = await employeeContext.Employee
-					.FirstOrDefaultAsync(emp => emp.RowId == Id);
+					.FirstOrDefaultAsync(e => e.RowId == Id);
 
 				return UpdatedEmpData;
 			}

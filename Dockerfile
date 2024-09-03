@@ -1,25 +1,40 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
+# Use the official .NET SDK image for the build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
+
+# Set the working directory
 WORKDIR /src
 
-COPY ["EmployeeAPI/EmployeeAPI.csproj", "EmployeeAPI/"]
-COPY ["EmployeeAPI.Data/EmployeeAPI.Data.csproj", "EmployeeAPI.Data/"]
-COPY ["EmployeeAPI.Services/EmployeeAPI.Services.csproj", "EmployeeAPI.Services/"]
+# Copy the solution file
+COPY *.sln ./
 
-RUN dotnet restore "EmployeeAPI/EmployeeAPI.csproj"
+# Copy and restore dependencies for each project
+COPY EmployeeAPI.Data/EmployeeAPI.Data.csproj EmployeeAPI.Data/
+COPY EmployeeAPI.Services/EmployeeAPI.Services.csproj EmployeeAPI.Services/
+COPY EmployeeAPI/EmployeeAPI.csproj EmployeeAPI/
+
+# Restore the dependencies for the entire solution
+RUN dotnet restore
+
+# Copy the entire source code
 COPY . .
 
-RUN dotnet build "EmployeeAPI/EmployeeAPI.csproj" -c $BUILD_CONFIGURATION  -o /app/build
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "EmployeeAPI/EmployeeAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish
+# Build the project(s)
+RUN dotnet build -c Release -o /app/build
 
-FROM base AS final
+# Publish the project(s)
+RUN dotnet publish -c Release -o /app/publish
+
+# Use the official .NET runtime image for the runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+
+# Set the working directory for the runtime
 WORKDIR /app
-COPY --from=publish /app/publish .
+
+# Copy the published files from the build stage
+COPY --from=build /app/publish .
+
+# Expose the port your application will run on
+EXPOSE 80
+
+# Define the entry point for the container
 ENTRYPOINT ["dotnet", "EmployeeAPI.dll"]
